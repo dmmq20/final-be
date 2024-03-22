@@ -28,6 +28,7 @@ def get_all_documents():
         db.connection.commit()
     return {"documents": doc_data}
 
+
 def get_document_by_ID(id):
     with PgDatabase() as db:
         db.cursor.execute("SELECT * FROM documents WHERE id = %s", (id,))
@@ -38,10 +39,12 @@ def get_document_by_ID(id):
     else:
         pass  # todo: handle non-existant id
 
+
 def insert_document(document):
     data = dict(document)
     with PgDatabase() as db:
-        db.cursor.execute(f"INSERT INTO documents (title, content) VALUES (%s, %s) RETURNING *;", (data["title"], data["content"]))
+        db.cursor.execute(
+            f"INSERT INTO documents (title, content) VALUES (%s, %s) RETURNING *;", (data["title"], data["content"]))
         db.connection.commit()
         inserted_id = db.cursor.fetchone()[0]
 

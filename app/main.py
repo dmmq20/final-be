@@ -25,24 +25,12 @@ def get_user(user_id: int):
 def get_documents():
     return get_all_documents()
 
+
 @app.get('/documents/{document_id}')
 def get_document(document_id: int):
     return get_document_by_ID(document_id)
 
+
 @app.post('/documents')
 def post_document(document: Document):
     return insert_document(document)
-
-# @app.post('/initdb')
-# async def initdb():
-#     try:
-#         drop_tables()
-#         create_tables()
-#         insert_test_users()
-#         insert_test_documents()
-#         return {"message": "Tables dropped and created!"}
-#     except Exception as e:
-#         raise HTTPException(
-#             status_code=status.HTTP_400_BAD_REQUEST,
-#             detail=f"Error {e}"
-#         )
