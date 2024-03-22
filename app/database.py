@@ -74,3 +74,4 @@ def insert_test_documents():
             db.cursor.execute(
                 f"INSERT INTO documents (title, content) VALUES (%s, %s)", doc)
             db.connection.commit()
+
