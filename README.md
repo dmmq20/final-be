@@ -14,6 +14,6 @@ touch .env
 
 echo DATABASE_URL=postgresql://@localhost/fastapi_db > .env
 
-python setup-dbs.py
+python setup_dbs.py
 
 uvicorn app.main:app --reload
