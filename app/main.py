@@ -1,24 +1,29 @@
 from fastapi import FastAPI, status
 from fastapi.exceptions import HTTPException
-from app.api import get_user_by_ID, get_all_users
+from app.api import get_user_by_ID, get_all_users, get_all_documents
+from .models import User
 
 app = FastAPI()
 
 
 @app.get('/')
 async def index():
-    return {'message': 'Welcome to news app!'}
+    return {'message': 'Welcome to the app!'}
 
 
 @app.get('/users')
 def get_users():
-    return get_all_users()
+    return {"users": get_all_users()}
 
 
 @app.get('/users/{user_id}')
 def get_user(user_id: int):
     return get_user_by_ID(user_id)
 
+
+@app.get('/documents')
+def get_documents():
+    return get_all_documents()
 
 # @app.post('/initdb')
 # async def initdb():
