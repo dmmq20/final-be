@@ -1,19 +1,50 @@
-# final-be
+# Final Backend Project
 
-git clone https://github.com/dmmq20/final-be.git
+This repository contains the backend code for the final project.
 
-cd final-be
+## Setup Instructions
 
-python3 -m venv venv
+Follow these steps to set up the project:
 
-source venv/bin/activate
+1. Clone the repository:
 
-pip install -r requirements.txt
+   ```bash
+   git clone https://github.com/dmmq20/final-be.git
+   cd final-be
+   ```
 
-touch .env
+2. Create a virtual environment:
 
-echo DATABASE_URL=postgresql://@localhost/fastapi_db > .env
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
 
-python setup_dbs.py
+3. Install the required dependencies:
 
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Create a `.env` file and configure the database URL:
+
+   ```bash
+   touch .env
+   echo DATABASE_URL=postgresql://@localhost/fastapi_db > .env
+   ```
+
+5. Set up the database:
+
+   ```bash
+   python setup_dbs.py
+   ```
+
+## Running the Server
+
+To start the server, run the following command:
+
+```bash
 uvicorn app.main:app --reload
+```
+
+This will start the server with auto-reloading enabled, making it convenient for development.
