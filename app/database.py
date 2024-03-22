@@ -2,7 +2,6 @@ import os
 import dotenv
 import psycopg
 from pathlib import Path
-from typing import List, Tuple
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -60,7 +59,7 @@ def drop_tables():
 
 def insert_test_users():
     with PgDatabase() as db:
-        users: List[Tuple[str, str]] = [
+        users = [
             ("testuser", "john doe"), ("testuser2", "jane doe")]
         for user in users:
             db.cursor.execute(
