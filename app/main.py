@@ -13,7 +13,7 @@ async def index():
 
 @app.get('/users')
 def get_users():
-    return {"users": get_all_users()}
+    return get_all_users()
 
 
 @app.get('/users/{user_id}')
