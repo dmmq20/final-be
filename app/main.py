@@ -1,6 +1,6 @@
 from fastapi import FastAPI, status
 from fastapi.exceptions import HTTPException
-from app.api import get_user_by_ID, get_all_users, get_all_documents, insert_document
+from app.api import get_user_by_ID, get_all_users, get_all_documents, insert_document, get_document_by_ID
 from .models import User, Document
 
 app = FastAPI()
@@ -24,6 +24,10 @@ def get_user(user_id: int):
 @app.get('/documents')
 def get_documents():
     return get_all_documents()
+
+@app.get('/documents/{document_id}')
+def get_document(document_id: int):
+    return get_document_by_ID(document_id)
 
 @app.post('/documents')
 def post_document(document: Document):
