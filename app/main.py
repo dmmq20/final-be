@@ -18,7 +18,10 @@ def get_users():
 
 @app.get('/users/{user_id}')
 def get_user(user_id: int):
-    return get_user_by_ID(user_id)
+    try:
+        return get_user_by_ID(user_id)
+    except HTTPException as e:
+        return {"msg": e.detail, "status": e.status_code}
 
 
 @app.get('/documents')

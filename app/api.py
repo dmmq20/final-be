@@ -1,4 +1,5 @@
 from app.database import PgDatabase
+from fastapi import HTTPException, status
 
 
 def format_response(cursor, data):
@@ -10,12 +11,13 @@ def get_user_by_ID(id):
     with PgDatabase() as db:
         db.cursor.execute("SELECT * FROM users WHERE id = %s", (id,))
         user_data = db.cursor.fetchone()
-        user_data = format_response(db.cursor, user_data)
-        db.connection.commit()
-    if user_data:
-        return {"user": user_data}
-    else:
-        pass  # todo: handle non-existant id
+        if user_data:
+            user_data = format_response(db.cursor, user_data)
+            db.connection.commit()
+            return {"user": user_data}
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
 
 def get_all_users():

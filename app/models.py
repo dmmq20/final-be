@@ -1,17 +1,16 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional
 
 
 class User(BaseModel):
-    id: Optional[int]
+    id: int | None
     username: str
-    first_name: Optional[str]
-    created_at: Optional[datetime]
+    first_name: str | None
+    created_at: datetime | None
 
 
 class Document(BaseModel):
-    id: Optional[int]
-    title: Optional[str]
+    id: int | None = None
+    title: str | None = None
     content: str
-    created_at: Optional[datetime]
+    created_at: datetime | None = None
