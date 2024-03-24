@@ -1,6 +1,6 @@
 from fastapi import FastAPI, status
 from fastapi.exceptions import HTTPException
-from app.api import get_user_by_ID, get_all_users, get_all_documents, insert_document, get_document_by_ID
+from .api import get_user_by_ID, get_all_users, get_all_documents, insert_document, get_document_by_ID
 from .models import User, Document
 
 app = FastAPI()
@@ -12,12 +12,12 @@ async def index():
 
 
 @app.get('/users')
-def get_users():
+async def get_users() -> list[User]:
     return get_all_users()
 
 
 @app.get('/users/{user_id}')
-def get_user(user_id: int):
+async def get_user(user_id: int):
     try:
         return get_user_by_ID(user_id)
     except HTTPException as e:
@@ -25,15 +25,15 @@ def get_user(user_id: int):
 
 
 @app.get('/documents')
-def get_documents():
+async def get_documents() -> list[Document]:
     return get_all_documents()
 
 
 @app.get('/documents/{document_id}')
-def get_document(document_id: int):
+async def get_document(document_id: int) -> Document:
     return get_document_by_ID(document_id)
 
 
 @app.post('/documents')
-def post_document(document: Document):
+async def post_document(document: Document) -> Document:
     return insert_document(document)
