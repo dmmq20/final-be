@@ -1,10 +1,10 @@
-from app.database import PgDatabase
+from .db import init_db
 from fastapi import HTTPException, status
 from .models import Document, User
 
 
 def get_user_by_ID(id):
-    with PgDatabase() as db:
+    with init_db as db:
         db.cursor.execute("SELECT * FROM users WHERE id = %s", (id,))
         user_data = db.cursor.fetchone()
         db.connection.commit()
@@ -19,7 +19,7 @@ def get_user_by_ID(id):
 
 
 def get_all_users():
-    with PgDatabase() as db:
+    with init_db as db:
         db.cursor.execute("SELECT * FROM users;")
         users_data = db.cursor.fetchall()
         db.connection.commit()
@@ -32,7 +32,7 @@ def get_all_users():
 
 
 def get_all_documents():
-    with PgDatabase() as db:
+    with init_db as db:
         db.cursor.execute("SELECT * FROM documents;")
         doc_data = db.cursor.fetchall()
         documents = [Document(id=id, title=title, content=content,
@@ -42,7 +42,7 @@ def get_all_documents():
 
 
 def get_document_by_ID(id):
-    with PgDatabase() as db:
+    with init_db as db:
         db.cursor.execute("SELECT * FROM documents WHERE id = %s", (id,))
         document_data = db.cursor.fetchone()
         db.connection.commit()
@@ -57,7 +57,7 @@ def get_document_by_ID(id):
 
 def insert_document(document: Document) -> Document:
     data = document.model_dump()
-    with PgDatabase() as db:
+    with init_db as db:
         query = "INSERT INTO documents (title, content) VALUES (%s, %s) RETURNING *;"
         params = (data["title"], data["content"])
         db.cursor.execute(query, params)
