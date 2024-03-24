@@ -1,36 +1,8 @@
-import os
-import dotenv
-import psycopg
-from pathlib import Path
-
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-dotenv.load_dotenv(BASE_DIR / ".env")
-
-
-class PgDatabase():
-    """PostgreSQL Database context manager"""
-
-    def __init__(self) -> None:
-        self.driver = psycopg
-
-    def connect_to_database(self):
-        return self.driver.connect(
-            os.getenv("DATABASE_URL")
-        )
-
-    def __enter__(self):
-        self.connection = self.connect_to_database()
-        self.cursor = self.connection.cursor()
-        return self
-
-    def __exit__(self, exception_type, exc_val, traceback):
-        self.cursor.close()
-        self.connection.close()
+from . import init_db
 
 
 def create_tables():
-    with PgDatabase() as db:
+    with init_db as db:
         db.cursor.execute(f"""CREATE TABLE users (
             id SERIAL PRIMARY KEY,
             username VARCHAR(50) NOT NULL,
@@ -50,7 +22,7 @@ def create_tables():
 
 
 def drop_tables():
-    with PgDatabase() as db:
+    with init_db as db:
         db.cursor.execute(f"DROP TABLE IF EXISTS users CASCADE;")
         db.cursor.execute(f"DROP TABLE IF EXISTS documents CASCADE;")
         db.connection.commit()
@@ -58,7 +30,7 @@ def drop_tables():
 
 
 def insert_test_users():
-    with PgDatabase() as db:
+    with init_db as db:
         users = [
             ("testuser", "john doe"), ("testuser2", "jane doe")]
         for user in users:
@@ -68,7 +40,7 @@ def insert_test_users():
 
 
 def insert_test_documents():
-    with PgDatabase() as db:
+    with init_db as db:
         documents = [("my first doc", "hello world!")]
         for doc in documents:
             db.cursor.execute(
