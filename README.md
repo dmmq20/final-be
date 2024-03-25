@@ -48,3 +48,18 @@ uvicorn app.main:app --reload
 ```
 
 This will start the server with auto-reloading enabled, making it convenient for development.
+
+## testing
+
+1. Install required dependencies:
+
+   ```bash
+   pip install pytest requests
+   pip install httpx
+   ```
+
+2. run tests:
+
+   ```bash
+   pytest
+   ```

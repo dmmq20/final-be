@@ -41,7 +41,7 @@ def insert_test_users():
 
 def insert_test_documents():
     with init_db as db:
-        documents = [("my first doc", "hello world!")]
+        documents = [("my first doc", "hello world!"), ["my second doc", "some useful information"]]
         for doc in documents:
             db.cursor.execute(
                 f"INSERT INTO documents (title, content) VALUES (%s, %s)", doc)

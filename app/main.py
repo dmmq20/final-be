@@ -34,6 +34,6 @@ async def get_document(document_id: int) -> Document:
     return get_document_by_ID(document_id)
 
 
-@app.post('/documents')
+@app.post('/documents', status_code=status.HTTP_201_CREATED)
 async def post_document(document: Document) -> Document:
     return insert_document(document)
