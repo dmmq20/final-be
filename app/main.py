@@ -2,7 +2,7 @@ from fastapi import FastAPI, status
 from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from .api import get_user_by_ID, get_all_users, get_all_documents, insert_document, get_document_by_ID
+from .api import get_user_by_ID, get_all_users, get_all_documents, insert_document, get_document_by_ID, insert_user
 from .models import User, Document
 
 app = FastAPI()
@@ -38,6 +38,11 @@ async def get_user(user_id: int):
         return get_user_by_ID(user_id)
     except HTTPException as e:
         return {"msg": e.detail, "status": e.status_code}
+
+
+@app.post('/users', status_code=status.HTTP_200_OK)
+async def create_user(user: User) -> User:
+    return insert_user(user)
 
 
 @app.get('/documents')
