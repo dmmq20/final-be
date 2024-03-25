@@ -14,6 +14,7 @@ def insert_user(user):
     username = user["username"]
     password = user["password"]
     hashed_pw = hash_password(password)
+    print(hashed_pw, "<<< hashed")
     with init_db as db:
         query = "INSERT INTO users (username, password) VALUES (%s, %s) RETURNING *;"
         params = (username, hashed_pw)
@@ -22,6 +23,30 @@ def insert_user(user):
         db.connection.commit()
         new_user = get_user_by_ID(inserted_id)
         return new_user
+
+
+def login_user(user):
+    user = user.model_dump()
+    username = user["username"]
+    password = user["password"]
+    hashed_pw = hash_password(password)
+    with init_db as db:
+        query = "SELECT username, password FROM users WHERE username = %s;"
+        db.cursor.execute(query, (username,))
+        user_data = db.cursor.fetchone()
+    if user_data:
+        user_username, stored_pw = user_data
+        decoded_string = hashed_pw.decode("utf-8")
+        print(decoded_string)
+        print(stored_pw, "<<stored", hashed_pw, "<< hashed")
+        if hashed_pw == stored_pw:
+            return {"message": "Login successful", "username": user_username}, status.HTTP_200_OK
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password")
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
 
 def get_user_by_ID(id):

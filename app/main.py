@@ -2,7 +2,7 @@ from fastapi import FastAPI, status
 from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from .api import get_user_by_ID, get_all_users, get_all_documents, insert_document, get_document_by_ID, insert_user
+from .api import get_user_by_ID, get_all_users, get_all_documents, insert_document, get_document_by_ID, insert_user, login_user
 from .models import User, Document
 
 app = FastAPI()
@@ -58,3 +58,8 @@ async def get_document(document_id: int) -> Document:
 @app.post('/documents', status_code=status.HTTP_201_CREATED)
 async def post_document(document: Document) -> Document:
     return insert_document(document)
+
+
+@app.post('/login')
+async def user_login(user: User) -> User:
+    return login_user(user)
