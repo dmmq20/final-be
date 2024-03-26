@@ -1,5 +1,5 @@
 from . import init_db
-from app.api import hash_password
+from app.utils import hash_password
 
 
 def create_tables():
