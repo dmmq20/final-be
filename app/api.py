@@ -5,9 +5,13 @@ import bcrypt
 
 
 def hash_password(password):
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-    return hashed_password
+    hashed_password_bytes = bcrypt.hashpw(
+        password.encode('utf-8'), bcrypt.gensalt())
+    hashed_password_str = hashed_password_bytes.decode('utf-8')
+    return hashed_password_str
 
+def verify_password(hashed_password, input_password):
+    return bcrypt.checkpw(input_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 def insert_user(user):
     user = user.model_dump()
@@ -29,17 +33,14 @@ def login_user(user):
     user = user.model_dump()
     username = user["username"]
     password = user["password"]
-    hashed_pw = hash_password(password)
     with init_db as db:
         query = "SELECT username, password FROM users WHERE username = %s;"
         db.cursor.execute(query, (username,))
         user_data = db.cursor.fetchone()
+        db.connection.commit()
     if user_data:
         user_username, stored_pw = user_data
-        decoded_string = hashed_pw.decode("utf-8")
-        print(decoded_string)
-        print(stored_pw, "<<stored", hashed_pw, "<< hashed")
-        if hashed_pw == stored_pw:
+        if verify_password(stored_pw, password):
             return {"message": "Login successful", "username": user_username}, status.HTTP_200_OK
         else:
             raise HTTPException(

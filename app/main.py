@@ -61,5 +61,5 @@ async def post_document(document: Document) -> Document:
 
 
 @app.post('/login')
-async def user_login(user: User) -> User:
+async def user_login(user: User):
     return login_user(user)
