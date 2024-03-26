@@ -1,5 +1,5 @@
+from fastapi import HTTPException, status
 from app.db import init_db
-# from fastapi import HTTPException, status
 
 from app.models import Document
 
@@ -23,10 +23,11 @@ def get_document_by_ID(id):
         db.cursor.execute("SELECT * FROM documents WHERE id = %s", (id,))
         document_data = db.cursor.fetchone()
         db.connection.commit()
-    if document_data:
-        return row_to_model(document_data)
-    else:
-        pass  # todo: handle non-existant id
+        if document_data:
+            return row_to_model(document_data)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Document not found")
 
 
 def insert_document(document: Document) -> Document:

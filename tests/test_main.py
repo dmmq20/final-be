@@ -52,6 +52,13 @@ def test_get_document():
     assert all(key in document_data for key in expected_keys)
 
 
+def test_get_nonexistant_document():
+    response = client.get("/documents/99999")
+    assert response.status_code == 404
+    response = response.json()
+    assert response["detail"] == "Document not found"
+
+
 def test_post_document():
     post_body = {"title": "doc3", "content": "more info"}
     response = client.post("/documents", json=post_body)

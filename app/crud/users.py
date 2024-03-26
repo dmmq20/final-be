@@ -4,6 +4,12 @@ from app.models import User
 from app.utils import hash_password
 
 
+def row_to_model(row) -> User:
+    id, username, password, created_at = row
+    return User(id=id, username=username,
+                password=password, created_at=created_at)
+
+
 def insert_user(user):
     user = user.model_dump()
     username = user["username"]
@@ -25,10 +31,7 @@ def get_user_by_ID(id):
         user_data = db.cursor.fetchone()
         db.connection.commit()
         if user_data:
-            id, username, password, created_at = user_data
-            user = User(id=id, username=username,
-                        password=password, created_at=created_at)
-            return user
+            return row_to_model(user_data)
         else:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
@@ -40,7 +43,5 @@ def get_all_users():
         users_data = db.cursor.fetchall()
         db.connection.commit()
         if users_data:
-            users = [User(id=id, username=username, password=password, created_at=created_at)
-                     for id, username, password, created_at in users_data]
-            return users
+            return [row_to_model(user) for user in users_data]
         return None

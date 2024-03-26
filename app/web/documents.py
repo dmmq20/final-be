@@ -15,7 +15,10 @@ async def get_documents() -> list[Document]:
 
 @router.get('/{document_id}')
 async def get_document(document_id: int) -> Document:
-    return service.get_one(document_id)
+    try:
+        return service.get_one(document_id)
+    except HTTPException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
