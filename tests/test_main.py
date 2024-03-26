@@ -19,8 +19,7 @@ def reseed_database():
 def test_get_users():
     response = client.get("/users")
     users_data = response.json()
-    # not currently testing for instances where the first_name is not present
-    expected_keys = ["id", "created_at", "username", "first_name"]
+    expected_keys = ["id", "created_at", "username", "password"]
     assert response.status_code == 200
     assert len(users_data) == 2
     for user in users_data:
@@ -30,8 +29,7 @@ def test_get_users():
 def test_get_user():
     response = client.get("/users/1")
     user_data = response.json()
-    # not currently testing for instances where the first_name is not present
-    expected_keys = ["id", "created_at", "username", "first_name"]
+    expected_keys = ["id", "created_at", "username", "password"]
     assert response.status_code == 200
     assert all(key in user_data for key in expected_keys)
 
@@ -61,4 +59,33 @@ def test_post_document():
     expected_keys = ["id", "title", "content", "created_at"]
     assert response.status_code == 201
     assert all(key in posted_document for key in expected_keys)
+
+def test_create_user():
+    post_body = {"username": "testuser3", "password": "password"}
+    response = client.post("/users", json=post_body)
+    posted_document = response.json()
+    expected_keys = ["id", "username", "password", "created_at"]
+    assert response.status_code == 200
+    assert all(key in posted_document for key in expected_keys)
     
+def test_user_login():
+    post_body = {"username": "testuser2", "password": "secret123"}
+    response = client.post("/login", json=post_body)
+    posted_document = response.json()[0]
+    expected_keys = ["message", "username"]
+    assert response.status_code == 200
+    assert all(key in posted_document for key in expected_keys)
+
+def test_user_login_incorrect_username():
+    post_body = {"username": "Paul", "password": "password"}
+    response = client.post("/login", json=post_body)
+    posted_document = response.json()
+    assert response.status_code == 404
+    assert posted_document["detail"] == "User not found"
+
+def test_user_login_incorrect_password():
+    post_body = {"username": "testuser2", "password": "secret"}
+    response = client.post("/login", json=post_body)
+    posted_document = response.json()
+    assert response.status_code == 401
+    assert posted_document["detail"] == "Incorrect password"
