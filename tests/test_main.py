@@ -60,6 +60,7 @@ def test_post_document():
     assert response.status_code == 201
     assert all(key in posted_document for key in expected_keys)
 
+
 def test_create_user():
     post_body = {"username": "testuser3", "password": "password"}
     response = client.post("/users", json=post_body)
@@ -67,7 +68,8 @@ def test_create_user():
     expected_keys = ["id", "username", "password", "created_at"]
     assert response.status_code == 200
     assert all(key in posted_document for key in expected_keys)
-    
+
+
 def test_user_login():
     post_body = {"username": "testuser2", "password": "secret123"}
     response = client.post("/login", json=post_body)
@@ -76,12 +78,14 @@ def test_user_login():
     assert response.status_code == 200
     assert all(key in posted_document for key in expected_keys)
 
+
 def test_user_login_incorrect_username():
     post_body = {"username": "Paul", "password": "password"}
     response = client.post("/login", json=post_body)
     posted_document = response.json()
     assert response.status_code == 404
     assert posted_document["detail"] == "User not found"
+
 
 def test_user_login_incorrect_password():
     post_body = {"username": "testuser2", "password": "secret"}

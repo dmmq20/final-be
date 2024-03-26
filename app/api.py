@@ -18,7 +18,6 @@ def insert_user(user):
     username = user["username"]
     password = user["password"]
     hashed_pw = hash_password(password)
-    print(hashed_pw, "<<< hashed")
     with init_db as db:
         query = "INSERT INTO users (username, password) VALUES (%s, %s) RETURNING *;"
         params = (username, hashed_pw)
