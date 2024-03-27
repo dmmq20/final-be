@@ -6,7 +6,7 @@ def create_tables():
     with init_db as db:
         db.cursor.execute(f"""CREATE TABLE users (
             id SERIAL PRIMARY KEY,
-            username VARCHAR(50) NOT NULL,
+            username VARCHAR(50) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             created_at TIMESTAMPTZ DEFAULT NOW()
             );
@@ -15,6 +15,7 @@ def create_tables():
             id SERIAL PRIMARY KEY,
             title VARCHAR(100),
             content TEXT NOT NULL,
+            author VARCHAR(50) REFERENCES users(username),
             created_at TIMESTAMPTZ DEFAULT NOW()
             );
         """)
@@ -51,11 +52,11 @@ def insert_test_users():
 
 def insert_test_documents():
     with init_db as db:
-        documents = [("my first doc", "hello world!"), [
-            "my second doc", "some useful information"]]
+        documents = [("my first doc", "hello world!", "testuser"), [
+            "my second doc", "some useful information", "testuser2"]]
         for doc in documents:
             db.cursor.execute(
-                f"INSERT INTO documents (title, content) VALUES (%s, %s)", doc)
+                f"INSERT INTO documents (title, content, author) VALUES (%s, %s, %s)", doc)
             db.connection.commit()
 
 def insert_test_comments():
