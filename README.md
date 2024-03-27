@@ -47,6 +47,12 @@ To start the server, run the following command:
 uvicorn app.main:app --reload
 ```
 
+OR
+
+```bash
+python main.py
+```
+
 This will start the server with auto-reloading enabled, making it convenient for development.
 
 ## Testing
