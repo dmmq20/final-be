@@ -1,13 +1,10 @@
-from fastapi import FastAPI, status
-from fastapi.exceptions import HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .web import documents
-from .web import users
-from .web import comments
+from app.web import documents, users, comments
 
-from .api import login_user
-from .models import User
+from app.api import login_user
+from app.models import User
 
 app = FastAPI()
 
@@ -38,3 +35,8 @@ async def index():
 @app.post('/login')
 async def user_login(user: User):
     return login_user(user)
+
+if __name__ == "__main__":
+
+    import uvicorn
+    uvicorn.run("main:app", host="localhost", port=8000, reload=True)
