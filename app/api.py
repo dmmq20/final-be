@@ -8,14 +8,14 @@ def login_user(user):
     username = user["username"]
     password = user["password"]
     with init_db as db:
-        query = "SELECT username, password FROM users WHERE username = %s;"
+        query = "SELECT id, username, password FROM users WHERE username = %s;"
         db.cursor.execute(query, (username,))
         user_data = db.cursor.fetchone()
         db.connection.commit()
     if user_data:
-        user_username, stored_pw = user_data
+        id, user_username, stored_pw = user_data
         if verify_password(stored_pw, password):
-            return {"message": "Login successful", "username": user_username}, status.HTTP_200_OK
+            return {"username": user_username, "id": id}, status.HTTP_200_OK
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password")
