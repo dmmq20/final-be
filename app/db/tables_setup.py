@@ -34,6 +34,7 @@ def drop_tables():
     with init_db as db:
         db.cursor.execute(f"DROP TABLE IF EXISTS users CASCADE;")
         db.cursor.execute(f"DROP TABLE IF EXISTS documents CASCADE;")
+        db.cursor.execute(f"DROP TABLE IF EXISTS comments CASCADE;")
         db.connection.commit()
         print("Tables are dropped...")
 
