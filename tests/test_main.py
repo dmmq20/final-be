@@ -1,5 +1,5 @@
 import pytest
-from app.main import app
+from main import app
 from fastapi.testclient import TestClient
 from app.db.tables_setup import drop_tables, create_tables, insert_test_documents, insert_test_users, insert_test_comments
 
@@ -82,7 +82,7 @@ def test_user_login():
     post_body = {"username": "testuser2", "password": "secret123"}
     response = client.post("/login", json=post_body)
     posted_document = response.json()[0]
-    expected_keys = ["message", "username"]
+    expected_keys = ["username", "id"]
     assert response.status_code == 200
     assert all(key in posted_document for key in expected_keys)
 
