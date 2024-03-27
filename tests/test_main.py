@@ -1,7 +1,7 @@
 import pytest
 from app.main import app
 from fastapi.testclient import TestClient
-from app.db.tables_setup import drop_tables, create_tables, insert_test_documents, insert_test_users
+from app.db.tables_setup import drop_tables, create_tables, insert_test_documents, insert_test_users, insert_test_comments
 
 client = TestClient(app)
 
@@ -10,8 +10,9 @@ client = TestClient(app)
 def reseed_database():
     drop_tables()
     create_tables()
-    insert_test_documents()
     insert_test_users()
+    insert_test_documents()
+    insert_test_comments()
 
     yield
 
@@ -60,7 +61,7 @@ def test_get_nonexistant_document():
 
 
 def test_post_document():
-    post_body = {"title": "doc3", "content": "more info"}
+    post_body = {"title": "doc3", "content": "more info", "author": "testuser"}
     response = client.post("/documents", json=post_body)
     posted_document = response.json()
     expected_keys = ["id", "title", "content", "created_at"]

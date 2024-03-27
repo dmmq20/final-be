@@ -5,8 +5,8 @@ from app.models import Document
 
 
 def row_to_model(row) -> Document:
-    id, title, content, created_at = row
-    return Document(id=id, title=title, content=content,
+    id, title, content, author, created_at = row
+    return Document(id=id, title=title, content=content, author=author,
                     created_at=created_at)
 
 
@@ -33,8 +33,8 @@ def get_document_by_ID(id):
 def insert_document(document: Document) -> Document:
     data = document.model_dump()
     with init_db as db:
-        query = "INSERT INTO documents (title, content) VALUES (%s, %s) RETURNING *;"
-        params = (data["title"], data["content"])
+        query = "INSERT INTO documents (title, content, author) VALUES (%s, %s, %s) RETURNING *;"
+        params = (data["title"], data["content"], data["author"])
         db.cursor.execute(query, params)
         inserted_id = db.cursor.fetchone()[0]
         db.connection.commit()

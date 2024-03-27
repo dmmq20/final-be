@@ -13,6 +13,7 @@ class Document(BaseModel):
     id: int | None = None
     title: str | None = None
     content: str
+    author: str
     created_at: datetime | None = None
 
 class Comment(BaseModel):
