@@ -18,6 +18,14 @@ def create_tables():
             created_at TIMESTAMPTZ DEFAULT NOW()
             );
         """)
+        db.cursor.execute(f"""Create Table comments (
+            id SERIAL PRIMARY KEY,
+            author INTEGER REFERENCES users(id),
+            document_id INTEGER REFERENCES documents(id),
+            content TEXT NOT NULL,
+            created_at TIMESTAMPTZ DEFAULT NOW()             
+            );
+        """)
         db.connection.commit()
         print("Tables are created successfully...")
 
@@ -47,4 +55,12 @@ def insert_test_documents():
         for doc in documents:
             db.cursor.execute(
                 f"INSERT INTO documents (title, content) VALUES (%s, %s)", doc)
+            db.connection.commit()
+
+def insert_test_comments():
+    with init_db as db:
+        comments = [("My first comment", 1, 2), ("my second comment", 2, 1)]
+        for comment in comments:
+            db.cursor.execute(
+                f"INSERT INTO comments (content, author, document_id) VALUES (%s, %s, %s)", comment)
             db.connection.commit()

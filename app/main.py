@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .web import documents
 from .web import users
+from .web import comments
 
 from .api import login_user
 from .models import User
@@ -26,6 +27,7 @@ app.add_middleware(
 
 app.include_router(users.router)
 app.include_router(documents.router)
+app.include_router(comments.router)
 
 
 @app.get('/')
