@@ -21,7 +21,7 @@ def create_tables():
         """)
         db.cursor.execute(f"""Create Table comments (
             id SERIAL PRIMARY KEY,
-            author INTEGER REFERENCES users(id),
+            author VARCHAR(50) REFERENCES users(username),
             document_id INTEGER REFERENCES documents(id),
             content TEXT NOT NULL,
             created_at TIMESTAMPTZ DEFAULT NOW()             
@@ -61,7 +61,7 @@ def insert_test_documents():
 
 def insert_test_comments():
     with init_db as db:
-        comments = [("My first comment", 1, 2), ("my second comment", 2, 1)]
+        comments = [("My first comment", "testuser", 2), ("my second comment", "testuser2", 1)]
         for comment in comments:
             db.cursor.execute(
                 f"INSERT INTO comments (content, author, document_id) VALUES (%s, %s, %s)", comment)

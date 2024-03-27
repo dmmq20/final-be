@@ -18,7 +18,7 @@ class Document(BaseModel):
 
 class Comment(BaseModel):
     id: int | None = None
-    author: int | None = None
+    author: str | None = None
     document_id: int | None = None
     content: str
     created_at: datetime | None = None
