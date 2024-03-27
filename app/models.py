@@ -14,3 +14,10 @@ class Document(BaseModel):
     title: str | None = None
     content: str
     created_at: datetime | None = None
+
+class Comment(BaseModel):
+    id: int | None = None
+    author: int | None = None
+    document_id: int | None = None
+    content: str
+    created_at: datetime | None = None
