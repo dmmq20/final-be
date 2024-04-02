@@ -1,4 +1,4 @@
-from app.models import User
+from app.models import User, Document
 from app.crud import users as service
 
 
@@ -12,3 +12,4 @@ def get_one(id) -> User:
 
 def create(user) -> User:
     return service.insert_user(user)
+

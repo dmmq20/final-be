@@ -45,3 +45,4 @@ def get_all_users():
         if users_data:
             return [row_to_model(user) for user in users_data]
         return None
+

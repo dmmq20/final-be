@@ -15,6 +15,7 @@ def create_tables():
             id SERIAL PRIMARY KEY,
             title VARCHAR(100),
             content TEXT NOT NULL,
+            author_id INTEGER REFERENCES users(id),
             author VARCHAR(50) REFERENCES users(username),
             created_at TIMESTAMPTZ DEFAULT NOW()
             );
@@ -58,11 +59,11 @@ def insert_test_users():
 
 def insert_test_documents():
     with init_db as db:
-        documents = [("my first doc", "hello world!", "testuser"), [
-            "my second doc", "some useful information", "testuser2"]]
+        documents = [("my first doc", "hello world!", 1, "testuser"), [
+            "my second doc", "some useful information", 2, "testuser2"]]
         for doc in documents:
             db.cursor.execute(
-                f"INSERT INTO documents (title, content, author) VALUES (%s, %s, %s)", doc)
+                f"INSERT INTO documents (title, content, author_id, author) VALUES (%s, %s, %s, %s)", doc)
             db.connection.commit()
 
 def insert_test_comments():
