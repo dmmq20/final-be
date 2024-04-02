@@ -24,7 +24,7 @@ class Comment(BaseModel):
     created_at: datetime | None = None
 
 class Collaboration(BaseModel):
-    id: int
+    id: int | None = None
     document_id: int
     user_id: int
-    username: str
+    username: str | None = None
