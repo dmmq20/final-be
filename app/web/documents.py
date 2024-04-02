@@ -2,9 +2,10 @@ from fastapi import APIRouter, status
 from fastapi.exceptions import HTTPException
 
 from app.services import documents as service
-from app.models import Document
+from app.models import Document, OwnerDocument
 
 router = APIRouter(prefix='/documents')
+router_without_prefix = APIRouter()
 
 
 @router.get('')
@@ -19,6 +20,10 @@ async def get_document(document_id: int) -> Document:
         return service.get_one(document_id)
     except HTTPException as e:
         raise HTTPException(status_code=e.status_code, detail=e.detail)
+    
+@router_without_prefix.get('/users/{user_id}/owned_documents')
+async def get_user_documents(user_id: int) -> list[OwnerDocument]:
+    return service.get_some(user_id)
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED)

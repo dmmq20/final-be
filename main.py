@@ -24,6 +24,7 @@ app.add_middleware(
 
 app.include_router(users.router)
 app.include_router(documents.router)
+app.include_router(documents.router_without_prefix)
 app.include_router(comments.router)
 app.include_router(collaborations.router)
 
