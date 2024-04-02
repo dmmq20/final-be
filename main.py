@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.web import documents, users, comments
+from app.web import documents, users, comments, collaborations
 
 from app.api import login_user
 from app.models import User
@@ -25,6 +25,7 @@ app.add_middleware(
 app.include_router(users.router)
 app.include_router(documents.router)
 app.include_router(comments.router)
+app.include_router(collaborations.router)
 
 
 @app.get('/')
