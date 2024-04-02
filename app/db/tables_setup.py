@@ -19,7 +19,7 @@ def create_tables():
             created_at TIMESTAMPTZ DEFAULT NOW()
             );
         """)
-        db.cursor.execute(f"""Create Table comments (
+        db.cursor.execute(f"""CREATE TABLE comments (
             id SERIAL PRIMARY KEY,
             author VARCHAR(50) REFERENCES users(username),
             document_id INTEGER REFERENCES documents(id),
@@ -27,6 +27,11 @@ def create_tables():
             created_at TIMESTAMPTZ DEFAULT NOW()             
             );
         """)
+        db.cursor.execute(f"""CREATE TABLE collaborations (
+            id SERIAL PRIMARY KEY,
+            document_id INTEGER REFERENCES documents(id),
+            user_id INT REFERENCES users(id)
+        )""")
         db.connection.commit()
         print("Tables are created successfully...")
 
@@ -36,6 +41,7 @@ def drop_tables():
         db.cursor.execute(f"DROP TABLE IF EXISTS users CASCADE;")
         db.cursor.execute(f"DROP TABLE IF EXISTS documents CASCADE;")
         db.cursor.execute(f"DROP TABLE IF EXISTS comments CASCADE;")
+        db.cursor.execute(f"DROP TABLE IF EXISTS collaborations CASCADE;")
         db.connection.commit()
         print("Tables are dropped...")
 
@@ -65,4 +71,12 @@ def insert_test_comments():
         for comment in comments:
             db.cursor.execute(
                 f"INSERT INTO comments (content, author, document_id) VALUES (%s, %s, %s)", comment)
+            db.connection.commit()
+
+def insert_test_collaborations():
+    with init_db as db:
+        collaborations = [(1, 1), (1, 2), (2, 1), (2, 2)]
+        for collaboration in collaborations:
+            db.cursor.execute(
+                f"INSERT INTO collaborations (document_id, user_id) VALUES (%s, %s)", collaboration)
             db.connection.commit()

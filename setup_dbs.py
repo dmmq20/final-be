@@ -6,12 +6,13 @@ try:
     subprocess.run(command, check=True)
     print("Setup SQL file executed successfully.")
 
-    from app.db.tables_setup import drop_tables, create_tables, insert_test_documents, insert_test_users, insert_test_comments
+    from app.db.tables_setup import drop_tables, create_tables, insert_test_documents, insert_test_users, insert_test_comments, insert_test_collaborations
     drop_tables()
     create_tables()
     insert_test_users()
     insert_test_documents()
     insert_test_comments()
+    insert_test_collaborations()
 
     print("Database setup completed successfully.")
 except subprocess.CalledProcessError as e:

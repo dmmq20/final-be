@@ -22,3 +22,9 @@ class Comment(BaseModel):
     document_id: int | None = None
     content: str
     created_at: datetime | None = None
+
+class Collaboration(BaseModel):
+    id: int
+    document_id: int
+    user_id: int
+    username: str
