@@ -21,7 +21,6 @@ def get_collaborations_by_document_id(document_id):
         db.cursor.execute(
             "SELECT collaborations.*, users.username FROM collaborations JOIN users ON collaborations.user_id = users.id WHERE collaborations.document_id = %s;", (document_id,))
         collaborations_data = db.cursor.fetchall()
-        print(collaborations_data)
         db.connection.commit()
     return [row_to_model(collaboration) for collaboration in collaborations_data]
 
