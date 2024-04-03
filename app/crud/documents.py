@@ -61,8 +61,8 @@ def get_documents_by_user_id(user_id):
 def update_document_by_id(document_id, document: UpdatedDocument) -> Document:
     data = document.model_dump()
     with init_db as db:
-        query = "UPDATE documents SET title = %s, content = %s WHERE documents.id = %s;"
-        params = (data["title"], data["content"], document_id)
+        query = "UPDATE documents SET content = %s WHERE documents.id = %s;"
+        params = (data["content"], document_id)
         db.cursor.execute(query, params)
         db.connection.commit()
         updated_document = get_document_by_ID(document_id)
