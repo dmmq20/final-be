@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from app.db import init_db
 
-from app.models import Document, OwnerDocument
+from app.models import Document, OwnerDocument, UpdatedDocument
 
 
 def row_to_model(row) -> Document:
@@ -57,3 +57,13 @@ def get_documents_by_user_id(user_id):
         document_data = db.cursor.fetchall()
         db.connection.commit()
     return [owner_document_row_to_model(document) for document in document_data]
+
+def update_document_by_id(document_id, document: UpdatedDocument) -> Document:
+    data = document.model_dump()
+    with init_db as db:
+        query = "UPDATE documents SET title = %s, content = %s WHERE documents.id = %s;"
+        params = (data["title"], data["content"], document_id)
+        db.cursor.execute(query, params)
+        db.connection.commit()
+        updated_document = get_document_by_ID(document_id)
+        return updated_document
