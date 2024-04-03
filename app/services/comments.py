@@ -6,3 +6,6 @@ def get_some(document_id) -> list[Comment]:
 
 def create(document_id, comment) -> Comment:
     return service.post_comment_by_document_id(document_id, comment)
+
+def delete(comment_id):
+    return service.delete_comment_by_id(comment_id)
