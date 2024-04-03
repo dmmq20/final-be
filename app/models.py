@@ -33,6 +33,7 @@ class Comment(BaseModel):
     document_id: int | None = None
     content: str
     created_at: datetime | None = None
+    avatar_url: str | None = None
 
 class DocumentCollaboration(BaseModel):
     id: int | None = None
