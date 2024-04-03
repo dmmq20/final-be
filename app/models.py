@@ -19,7 +19,6 @@ class Document(BaseModel):
 
 class UpdatedDocument(BaseModel):
     document_id: int | None = None
-    title: str | None = None
     content: str
 
 class OwnerDocument(BaseModel):
