@@ -5,9 +5,9 @@ from app.utils import hash_password
 
 
 def row_to_model(row) -> User:
-    id, username, password, created_at = row
+    id, username, password, avatar_url, created_at = row
     return User(id=id, username=username,
-                password=password, created_at=created_at)
+                password=password, avatar_url=avatar_url, created_at=created_at)
 
 
 def insert_user(user):
@@ -15,9 +15,10 @@ def insert_user(user):
     username = user["username"]
     password = user["password"]
     hashed_pw = hash_password(password)
+    default_avatar_url = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
     with init_db as db:
-        query = "INSERT INTO users (username, password) VALUES (%s, %s) RETURNING *;"
-        params = (username, hashed_pw)
+        query = "INSERT INTO users (username, password, avatar_url) VALUES (%s, %s, %s) RETURNING *;"
+        params = (username, hashed_pw, default_avatar_url)
         db.cursor.execute(query, params)
         inserted_id = db.cursor.fetchone()[0]
         db.connection.commit()

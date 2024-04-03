@@ -8,6 +8,7 @@ def create_tables():
             id SERIAL PRIMARY KEY,
             username VARCHAR(50) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
+            avatar_url VARCHAR(255),
             created_at TIMESTAMPTZ DEFAULT NOW()
             );
         """)
@@ -50,10 +51,10 @@ def drop_tables():
 def insert_test_users():
     with init_db as db:
         users = [
-            ("testuser", hash_password("password123")), ("testuser2", hash_password("secret123"))]
+            ("testuser", hash_password("password123"), "https://miro.medium.com/v2/resize:fit:1020/1*jZ9v-2QShwnfCwHlEZCmDw.png"), ("testuser2", hash_password("secret123"), "https://miro.medium.com/v2/resize:fit:1020/1*jZ9v-2QShwnfCwHlEZCmDw.png")]
         for user in users:
             db.cursor.execute(
-                f"INSERT INTO users (username, password) VALUES (%s, %s)", user)
+                f"INSERT INTO users (username, password, avatar_url) VALUES (%s, %s, %s)", user)
             db.connection.commit()
 
 
