@@ -20,7 +20,6 @@ def get_all_documents():
     with init_db as db:
         db.cursor.execute("SELECT * FROM documents;")
         doc_data = db.cursor.fetchall()
-        print(doc_data)
         db.connection.commit()
     return [row_to_model(doc) for doc in doc_data]
 
