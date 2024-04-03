@@ -1,5 +1,9 @@
 from . import init_db
 from app.utils import hash_password
+from app.db.data.users import userData
+from app.db.data.documents import documentData
+from app.db.data.comments import commentData
+from app.db.data.collaborations import collaborationData
 
 
 def create_tables():
@@ -50,9 +54,7 @@ def drop_tables():
 
 def insert_test_users():
     with init_db as db:
-        users = [
-            ("testuser", hash_password("password123"), "https://miro.medium.com/v2/resize:fit:1020/1*jZ9v-2QShwnfCwHlEZCmDw.png"), ("testuser2", hash_password("secret123"), "https://miro.medium.com/v2/resize:fit:1020/1*jZ9v-2QShwnfCwHlEZCmDw.png")]
-        for user in users:
+        for user in userData:
             db.cursor.execute(
                 f"INSERT INTO users (username, password, avatar_url) VALUES (%s, %s, %s)", user)
             db.connection.commit()
@@ -60,25 +62,21 @@ def insert_test_users():
 
 def insert_test_documents():
     with init_db as db:
-        documents = [("my first doc", "hello world!", 1, "testuser"), [
-            "my second doc", "some useful information", 2, "testuser2"]]
-        for doc in documents:
+        for doc in documentData:
             db.cursor.execute(
                 f"INSERT INTO documents (title, content, author_id, author) VALUES (%s, %s, %s, %s)", doc)
             db.connection.commit()
 
 def insert_test_comments():
     with init_db as db:
-        comments = [("My first comment", "testuser", 2), ("my second comment", "testuser2", 1)]
-        for comment in comments:
+        for comment in commentData:
             db.cursor.execute(
                 f"INSERT INTO comments (content, author, document_id) VALUES (%s, %s, %s)", comment)
             db.connection.commit()
 
 def insert_test_collaborations():
     with init_db as db:
-        collaborations = [(1, 1), (1, 2), (2, 1), (2, 2)]
-        for collaboration in collaborations:
+        for collaboration in collaborationData:
             db.cursor.execute(
                 f"INSERT INTO collaborations (document_id, user_id) VALUES (%s, %s)", collaboration)
             db.connection.commit()
