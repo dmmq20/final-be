@@ -15,3 +15,6 @@ def create(document) -> Document:
 
 def get_some(user_id) -> list[OwnerDocument]:
     return service.get_documents_by_user_id(user_id)
+
+def update(document_id, document) -> Document:
+    return service.update_document_by_id(document_id, document)

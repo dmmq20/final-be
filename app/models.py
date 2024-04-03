@@ -17,6 +17,11 @@ class Document(BaseModel):
     author: str
     created_at: datetime | None = None
 
+class UpdatedDocument(BaseModel):
+    document_id: int | None = None
+    title: str | None = None
+    content: str
+
 class OwnerDocument(BaseModel):
     id: int | None = None
     title: str | None = None
