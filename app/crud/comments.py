@@ -32,3 +32,9 @@ def post_comment_by_document_id(document_id, comment: Comment) -> Comment:
         db.connection.commit()
         new_comment = get_comment_by_id(inserted_id)
         return new_comment
+    
+def delete_comment_by_id(comment_id):
+    with init_db as db:
+        db.cursor.execute("DELETE FROM comments WHERE id = %s RETURNING *;", (comment_id,))
+        db.connection.commit()
+    return {"message": "comment successfully deleted"}
