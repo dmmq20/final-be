@@ -61,10 +61,10 @@ def test_get_nonexistant_document():
 
 
 def test_post_document():
-    post_body = {"title": "doc3", "content": "more info", "author": "testuser"}
+    post_body = {"title": "doc3", "content": "more info", "author_id": 1, "author": "testuser"}
     response = client.post("/documents", json=post_body)
     posted_document = response.json()
-    expected_keys = ["id", "title", "content", "created_at"]
+    expected_keys = ["id", "title", "content", "created_at", "author", "author_id"]
     assert response.status_code == 201
     assert all(key in posted_document for key in expected_keys)
 
