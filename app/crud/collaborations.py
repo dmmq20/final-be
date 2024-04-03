@@ -5,8 +5,8 @@ from app.models import DocumentCollaboration, UserCollaboration
 
 
 def document_row_to_model(row) -> DocumentCollaboration:
-    id, document_id, user_id, username = row
-    return DocumentCollaboration(id=id, document_id=document_id, user_id=user_id, username=username)
+    id, document_id, user_id, username, avatar_url = row
+    return DocumentCollaboration(id=id, document_id=document_id, user_id=user_id, username=username, avatar_url=avatar_url)
 
 def user_row_to_model(row) -> UserCollaboration:
     id, document_id, user_id, title = row
@@ -25,7 +25,7 @@ def get_collaborations_by_id(id):
 def get_collaborations_by_document_id(document_id):
     with init_db as db:
         db.cursor.execute(
-            "SELECT collaborations.*, users.username FROM collaborations JOIN users ON collaborations.user_id = users.id WHERE collaborations.document_id = %s;", (document_id,))
+            "SELECT collaborations.*, users.username, users.avatar_url FROM collaborations JOIN users ON collaborations.user_id = users.id WHERE collaborations.document_id = %s;", (document_id,))
         collaborations_data = db.cursor.fetchall()
         db.connection.commit()
     return [document_row_to_model(collaboration) for collaboration in collaborations_data]

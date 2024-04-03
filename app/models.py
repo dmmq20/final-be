@@ -39,6 +39,7 @@ class DocumentCollaboration(BaseModel):
     document_id: int
     user_id: int
     username: str | None = None
+    avatar_url: str | None = None
 
 class UserCollaboration(BaseModel):
     id: int | None = None
