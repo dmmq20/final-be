@@ -13,12 +13,13 @@ def row_to_model(row) -> Document:
 def owner_document_row_to_model(row) -> OwnerDocument:
     id, title, created_at = row
     return OwnerDocument(id=id, title=title,
-                    created_at=created_at)
+                         created_at=created_at)
 
 
 def get_all_documents():
     with init_db as db:
-        db.cursor.execute("SELECT documents.*, users.avatar_url FROM documents JOIN users ON documents.author_id = users.id;")
+        db.cursor.execute(
+            "SELECT documents.*, users.avatar_url FROM documents JOIN users ON documents.author_id = users.id;")
         doc_data = db.cursor.fetchall()
         db.connection.commit()
     return [row_to_model(doc) for doc in doc_data]
@@ -26,7 +27,8 @@ def get_all_documents():
 
 def get_document_by_ID(id):
     with init_db as db:
-        db.cursor.execute("SELECT documents.*, users.avatar_url FROM documents JOIN users ON documents.author_id = users.id WHERE documents.id = %s", (id,))
+        db.cursor.execute(
+            "SELECT documents.*, users.avatar_url FROM documents JOIN users ON documents.author_id = users.id WHERE documents.id = %s", (id,))
         document_data = db.cursor.fetchone()
         db.connection.commit()
         if document_data:
@@ -57,10 +59,11 @@ def get_documents_by_user_id(user_id):
         db.connection.commit()
     return [owner_document_row_to_model(document) for document in document_data]
 
+
 def update_document_by_id(document_id, document: UpdatedDocument) -> Document:
     data = document.model_dump()
     with init_db as db:
-        query = "UPDATE documents SET content = %s WHERE documents.id = %s;"
+        query = "UPDATE documents SET content = %s, created_at = NOW() WHERE documents.id = %s;"
         params = (data["content"], document_id)
         db.cursor.execute(query, params)
         db.connection.commit()
