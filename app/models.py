@@ -17,6 +17,7 @@ class Document(BaseModel):
     author_id: int
     author: str
     created_at: datetime | None = None
+    avatar_url: str | None = None
 
 class UpdatedDocument(BaseModel):
     document_id: int | None = None

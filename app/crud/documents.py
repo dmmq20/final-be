@@ -5,9 +5,9 @@ from app.models import Document, OwnerDocument, UpdatedDocument
 
 
 def row_to_model(row) -> Document:
-    id, title, content, author_id, author, created_at = row
+    id, title, content, author_id, author, created_at, avatar_url = row
     return Document(id=id, title=title, content=content, author_id=author_id, author=author,
-                    created_at=created_at)
+                    created_at=created_at, avatar_url=avatar_url)
 
 
 def owner_document_row_to_model(row) -> OwnerDocument:
@@ -18,7 +18,7 @@ def owner_document_row_to_model(row) -> OwnerDocument:
 
 def get_all_documents():
     with init_db as db:
-        db.cursor.execute("SELECT * FROM documents;")
+        db.cursor.execute("SELECT documents.*, users.avatar_url FROM documents JOIN users ON documents.author_id = users.id;")
         doc_data = db.cursor.fetchall()
         db.connection.commit()
     return [row_to_model(doc) for doc in doc_data]
@@ -26,7 +26,7 @@ def get_all_documents():
 
 def get_document_by_ID(id):
     with init_db as db:
-        db.cursor.execute("SELECT * FROM documents WHERE id = %s", (id,))
+        db.cursor.execute("SELECT documents.*, users.avatar_url FROM documents JOIN users ON documents.author_id = users.id WHERE documents.id = %s", (id,))
         document_data = db.cursor.fetchone()
         db.connection.commit()
         if document_data:
